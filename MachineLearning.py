@@ -1,7 +1,13 @@
 
+file = list()
 def ReadFile(file):
-    text_file = open(file, "r")
-    lines = text_file.readlines()
-    print (lines)
+    with open(file) as f:
+        lines = f.readlines()
+        print(lines)
+
 
 ReadFile("TennisDataSet.txt")
+
+
+#def entropy():
+#    entropy = -(Yes)*(log(yes)/log(2)) - (pNo * (log_2(no)/log(2))
