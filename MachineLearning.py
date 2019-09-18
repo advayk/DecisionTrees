@@ -22,59 +22,45 @@ header = myfile.readline().strip().split(',')
 category = header[0:] # depdent
 #print("category" , category)
 #print("")
-first_line = header[0:] # end is default # attributes( indepdent)
-print("atributes" , first_line)
-#days['new key'] = 'new value'
-
+first_line = header[1:] # end is default # attributes( indepdent)
 
 
 
 header = myfile.readline().strip().split(',')
-#print("header", header)
 attributes = header[1:] # depdent
 
 
 header = myfile.readline().strip().split(',')
-#category = header[0:] # depdent
-#print("category" , category)
+
+
+lines = []
 def ReadFile(file):
-    lines = []
     for line in open(file):
         sentence = line.strip().split(",")
-        print("")
         dict = {}
-        for item in first_line:
-            for word in sentence:
-                print(" " , word)
-            #dict.append(word:sentence)
-            #dict[word] = sentence
-            #print (word)
+        for word, attribute in zip(sentence, first_line): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
+            #print(attribute, word)
+            dict[attribute]=word # creating a new entry
+        tuple = (sentence[0],dict)
+        lines.append(tuple)
+    print(*lines , sep = " \n ")
+    print("lenght of list" , len(lines))
+    category_value = [value[0] for value in lines] # prints the first value of the tuple in the list
+    first_value = category_value[1]
+    counter_1 = 0
+    counter_2 = 0
+    for value in category_value:
+        if(first_value != value):
+            counter_1 += 1
+        else:
+            counter_2 += 1
+    print(counter_1, " and " ,  counter_2)
+    entropy(counter_1, counter_2)
+    #print(str(category_value))
 
-        lines.append(dict)
-
-
-            #attributes = header[1:] # end is default # attributes( indepdent)
-
-            #print(attributes)
-
-        #for word in sentence:
-            #print(word.split(","))
-
-        #items = line.split(',')
-        #list.append(items)
-        #print(list[0])
-        #print(items)
-        #list.append(line)
-        #print(list[0])
-print(list)
-ReadFile("TennisDataSet.txt")
-print(dict)
-
-def entropy(Yes,No):
+def entropy(Yes, No):
     entropy = -(Yes)*(math.log(Yes)/math.log(2)) - (No) * (math.log(No)/math.log(2))
     print (entropy)
 
-Yes = 5
-No = 10
 
-entropy(Yes,No)
+ReadFile("TennisDataSet.txt")
