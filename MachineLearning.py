@@ -64,11 +64,11 @@ def ReadFile(file):
     print("entropy value" , entropy_value)
     #print(str(category_value))
 
-#def atributes_gain():
-#    for i in range len(lines):
+def atributes_gain():
+    for i in (range(len(lines))):
+        first_Value = [value[1] for value in lines] # prints the first value of the tuple in the list
 
-
-
+        print(first_Value)
 
 
 
@@ -79,4 +79,4 @@ def entropy(Yes, No):
 #def gain(Entropy(s) - )
 
 ReadFile("TennisDataSet.txt")
-#atributes_gain()
+atributes_gain()
