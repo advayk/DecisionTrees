@@ -59,10 +59,18 @@ def ReadFile(file):
         else:
             print(value)
             first_counter += 1
-    print(second_value, " : ", second_counter, " and " , first_value, ":" , first_counter)
+    #print(second_value, " : ", second_counter, " and " , first_value, ":" , first_counter)
     entropy_value = entropy((second_counter/total_number_categories), (first_counter/total_number_categories))
     print("entropy value" , entropy_value)
     #print(str(category_value))
+
+#def atributes_gain():
+#    for i in range len(lines):
+
+
+
+
+
 
 def entropy(Yes, No):
         entropy = -(Yes*(math.log(Yes)/math.log(2))) - (No) * (math.log(No)/math.log(2))
@@ -71,3 +79,4 @@ def entropy(Yes, No):
 #def gain(Entropy(s) - )
 
 ReadFile("TennisDataSet.txt")
+#atributes_gain()
