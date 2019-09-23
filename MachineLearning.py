@@ -17,22 +17,21 @@ texting_set = []
 days = {} # dictionary which will store the atribute as the key and the and the value as the result
 
 header = myfile.readline().strip().split(',')
-category = header[0:] # depdent
+#category = header[0:] # depdent
 #print("category" , category)
 #print("")
 first_line = header[1:] # end is default # attributes( indepdent)
 
-print(len(category))
+#print(len(category))
 
-header = myfile.readline().strip().split(',')
+#header = myfile.readline().strip().split(',')
 attributes = header[1:] # depdent
 
 
-header = myfile.readline().strip().split(',')
+#header = myfile.readline().strip().split(',')
 
 
 lines = []
-
 def ReadFile(file):
     for line in open(file):
         sentence = line.strip().split(",")
@@ -42,9 +41,11 @@ def ReadFile(file):
             dict[attribute]=word # creating a new entry
         tuple = (sentence[0],dict)
         lines.append(tuple)
-    #print(*lines , sep = " \n ")
+#    print("Printing Lines now")
+#    print(*lines , sep = " \n ")
+#    print("done********")
     #print("lenght of list" , len(lines))
-
+    #print(lines)
     category_value = [value[0] for value in lines] # prints the first value of the tuple in the list
     total_number_categories = (len(category_value)-1) # since play tennis is in the list
     first_value = category_value[1]
@@ -55,20 +56,81 @@ def ReadFile(file):
         if(first_value != value):
             second_value = value
             second_counter += 1
-            print("-", value)
+            #print("-", value)
         else:
-            print(value)
+            #print(value)
             first_counter += 1
     #print(second_value, " : ", second_counter, " and " , first_value, ":" , first_counter)
     entropy_value = entropy((second_counter/total_number_categories), (first_counter/total_number_categories))
     print("entropy value" , entropy_value)
     #print(str(category_value))
 
-def atributes_gain():
-    for i in (range(len(lines))):
-        first_Value = [value[1] for value in lines] # prints the first value of the tuple in the list
+def atributes_gain(set):
+    #first_value = [value[1] for value in lines]
+    #print("This is the first value" , first_value)
+    first_value = [value[1] for value in lines] # list of dict from second value of tuple in list
+    #print(first_value) # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
+    for x in range(len(first_line)):
+        attibute = attributes[x]
+        print(attibute)
+        print("-----")
+        for i in range(len(first_value)): # actually the attibutes
+            first_dict = first_value[i]
+            print(first_dict.get(attibute))
+            #print(first_value)
+            #print(first_value)
+        #    first_value = first_dict.get(attibute)
+        #    print(first_value)
+        #    if(first_value = first_value[i].get)
 
-        print(first_Value)
+            #print(first_value[i])
+
+            #print(question)
+            #first_value = 0
+            #second_value = 0
+        #    print(first_value[1].get(attibute))
+            #if(question = first_value[i].get(attibute)):
+            #    first_value + 1
+            #else:
+            #    second_value + 1
+
+            #if(question = first_value[i]):
+            #    first_counter + 1
+            #print(question)
+            #dict = first_value[i]
+        #    print(question.get(attibute))
+            #print(first_counter)
+        #    S1 = []#
+        #    S1.append(dict)
+            #if(S1.contains())
+
+            #print(dict.get(attibute))
+
+            #print(first_value[i])
+
+
+    #    for dict, attribute in zip(first_value, first_line):
+    #    print("attibutes" , attributes)
+#        print("attribute", ":" , attribute, "---", "dict" , ":" , dict)
+        #value = dict.get(attribute)
+    #    print(value)
+    #for i in (range(len(first_value))):
+#        example = first_value[i]
+        #print(example)
+    #for x in range(len(attributes)):
+    #    print(attributes[x])
+
+
+
+    #    print(example)
+    #for x in range(len(attributes)):
+    #    attribute = attributes[x]
+#        print(value)
+
+            #print(first_value)
+        #    print("Type of first value", type(first_value))
+        #    print("This is the first value" , first_value)
+            #print(first_value[i].get(value, default = None))
 
 
 
@@ -79,4 +141,5 @@ def entropy(Yes, No):
 #def gain(Entropy(s) - )
 
 ReadFile("TennisDataSet.txt")
-atributes_gain()
+
+atributes_gain(lines)
