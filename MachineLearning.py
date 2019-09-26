@@ -27,7 +27,7 @@ def ReadFile(file):
     #    print(sentence)
         dict = {}
         for value, attribute in zip(sentence[1:], header[1:]): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
-            dict[attribute]=value # creating a new entry
+            dict[attribute] = value # creating a new entry
         tuple = (sentence[0],dict)
         data.append(tuple)
 
@@ -35,51 +35,50 @@ def ReadFile(file):
 def call_attibutes():
     for x in header[1:]:
         atributes_gain(data, x)
-        print("---------------")
+        print("----------------------------------------------")
 
 def atributes_gain(set, attibute):
-    sub_set = []
-    first_value = [value[1] for value in set] # list of dict from second value of tuple in list
+    sub_set_of_values = []
+    dict = [value[1] for value in set] # list of dict from second value of tuple in list
 
-    #print(first_value) # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
-    for x in range(len(first_value)):
-        value = (first_value[x].get(attibute))
-        sub_set.append(value)
+    for x in range(len(dict)):
+        value = (dict[x].get(attibute))
+        sub_set_of_values.append(value)
 
-    sorted = Counter(sub_set)
-    sub_list_of_attibutes = []
+    sorted = Counter(sub_set_of_values) # counts the value in the set of the given attribute
+    sorted_values = [] # attibute values sorted according to index
     for key in sorted:
         attibutes_sub_list = []
         for x in range(0,len(set)):
             if(key in set[x][1].values()):
                 attibutes_sub_list.append(set[x])
 
-        sub_list_of_attibutes.append(attibutes_sub_list)
-    print(sub_set)
+        sorted_values.append(attibutes_sub_list)
+#    print("sub set" , sub_set_of_values)
     entropy = (entropy_categories(set))
     print("entropy of set" , entropy)
     size_of_set = len(set)
-    for x in range(len(sub_list_of_attibutes)):
-        values_for_entropy = sub_list_of_attibutes[x]
-        sub_entropy = (len(sub_list_of_attibutes[x])/size_of_set)*entropy_categories(values_for_entropy)
+
+    for x in range(len(sorted_values)):
+        values_for_entropy = sorted_values[x]
+        sub_entropy = (len(sorted_values[x])/size_of_set)*entropy_categories(values_for_entropy)
         entropy = entropy - sub_entropy
     print("entropy of" , attibute, ":", entropy)
 
 
-# N.B: divide the divided cateogies of the yes and the no, by the category type
 def entropy_categories(set):
-    category_value = [value[0] for value in set] # prints the first value of the tuple in the list
+    category_value = [value[0] for value in set] # list of first values of the tuple ( yes, no, yes, no etc..)
     total_number_categories = (len(category_value)) # since play tennis is in the list
-    sorted = Counter(category_value)
+    sorted = Counter(category_value) # sort the values
     len_of_list = len(sorted)
 
-    entropyV = 0
+    total_entropy = 0
     for key in sorted.values():
     #    print(key)
         value = key/total_number_categories
-        entropy2 = (value*(math.log(value)/math.log(2)))
-        entropyV = entropyV - entropy2
-    return(entropyV)
+        entropy_of_category = (value*(math.log(value)/math.log(2)))
+        total_entropy = total_entropy - entropy_of_category
+    return(total_entropy)
 
 ReadFile("TennisDataSet.txt")
 call_attibutes()
