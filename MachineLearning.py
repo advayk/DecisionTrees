@@ -30,7 +30,7 @@ def ReadFile(file):
             dict[attribute] = value # creating a new entry
         tuple = (sentence[0],dict)
         data.append(tuple)
-
+    ID3(data,attributes)
 
 def call_attibutes():
     for x in header[1:]:
@@ -56,14 +56,16 @@ def atributes_gain(set, attibute):
         sorted_values.append(attibutes_sub_list)
 #    print("sub set" , sub_set_of_values)
     entropy = (entropy_categories(set))
-    print("entropy of set" , entropy)
+#    print("entropy of set" , entropy)
     size_of_set = len(set)
 
     for x in range(len(sorted_values)):
         values_for_entropy = sorted_values[x]
         sub_entropy = (len(sorted_values[x])/size_of_set)*entropy_categories(values_for_entropy)
         entropy = entropy - sub_entropy
-    print("entropy of" , attibute, ":", entropy)
+
+    tuple = (entropy, attibute)
+    return(tuple)
 
 
 def entropy_categories(set):
@@ -80,5 +82,46 @@ def entropy_categories(set):
         total_entropy = total_entropy - entropy_of_category
     return(total_entropy)
 
+
+def ID3(set, attributes):
+    category_value = [value[0] for value in set] # prints the category value
+    #atributes_gain(set,attributes )
+    # copy_attributes = attribute
+    # gain = {}
+    #
+    # for attibute in attibutes[1:]:
+    #     atributes_gain(set,attibute)
+    #
+
+    print(len(category_value))
+    # print("copy of attributes ", copy_attributes)
+    same = True
+    for x in range(0,len(category_value)-1): # from 0 - 12
+        if(category_value[x] != category_value[x+1]): # will go to 13
+            same = False
+    print(same)
+
+    attibute_entropy = []
+    for attibute in attributes[:]:
+        attibute_entropy.append(atributes_gain(set, attibute))
+#    print(attibute_entropy)
+
+    best_attibute = max(attibute_entropy)
+
+    #best_attibute = [best[1] for best in attibute_entropy] # second value of tuple - gain
+    #print(best_attibute)
+    #best_attibute_value = (max(best_attibute))
+    #print("Biggest gain: ", best_attibute)
+    print(Node(best_attibute).attibute)
+#    print(set)
+
+# new attibute = [attr for attr in attibute if attr!= bestAttr]
+
+class Node:
+    def __init__(self, attibute):
+        self.attibute = attibute
+
+
+
 ReadFile("TennisDataSet.txt")
-call_attibutes()
+#call_attibutes()
