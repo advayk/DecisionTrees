@@ -10,136 +10,76 @@
 
 # in node class store children as dictionaries the keys for these dictionaries could be the values of the atribute, the values of the map would be node that is your child
 import math
-myfile = open("TennisDataSet.txt","r")
+from collections import Counter
+
+
 training_set = []
 texting_set = []
 
-days = {} # dictionary which will store the atribute as the key and the and the value as the result
-
+myfile = open("TennisDataSet.txt","r")
 header = myfile.readline().strip().split(',')
-#category = header[0:] # depdent
-#print("category" , category)
-#print("")
-first_line = header[1:] # end is default # attributes( indepdent)
+attributes = header[1:]
 
-#print(len(category))
-
-#header = myfile.readline().strip().split(',')
-attributes = header[1:] # depdent
-
-
-#header = myfile.readline().strip().split(',')
-
-
-lines = []
+data = []
 def ReadFile(file):
-    for line in open(file):
+    for line in myfile:
         sentence = line.strip().split(",")
+    #    print(sentence)
         dict = {}
-        for word, attribute in zip(sentence, first_line): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
-            #print(attribute, word)
-            dict[attribute]=word # creating a new entry
+        for value, attribute in zip(sentence[1:], header[1:]): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
+            dict[attribute]=value # creating a new entry
         tuple = (sentence[0],dict)
-        lines.append(tuple)
-#    print("Printing Lines now")
-#    print(*lines , sep = " \n ")
-#    print("done********")
-    #print("lenght of list" , len(lines))
-    #print(lines)
-    category_value = [value[0] for value in lines] # prints the first value of the tuple in the list
-    total_number_categories = (len(category_value)-1) # since play tennis is in the list
-    first_value = category_value[1]
-    global second_value
-    first_counter = 0
-    second_counter = 0
-    for value in category_value[1:]:
-        if(first_value != value):
-            second_value = value
-            second_counter += 1
-            #print("-", value)
-        else:
-            #print(value)
-            first_counter += 1
-    #print(second_value, " : ", second_counter, " and " , first_value, ":" , first_counter)
-    entropy_value = entropy((second_counter/total_number_categories), (first_counter/total_number_categories))
-    print("entropy value" , entropy_value)
-    #print(str(category_value))
+        data.append(tuple)
 
-def atributes_gain(set):
-    #first_value = [value[1] for value in lines]
-    #print("This is the first value" , first_value)
-    first_value = [value[1] for value in lines] # list of dict from second value of tuple in list
+
+def call_attibutes():
+    for x in header[1:]:
+        atributes_gain(data, x)
+        print("---------------")
+
+def atributes_gain(set, attibute):
+    sub_set = []
+    first_value = [value[1] for value in set] # list of dict from second value of tuple in list
+
     #print(first_value) # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
-    for x in range(len(first_line)):
-        attibute = attributes[x]
-        print(attibute)
-        print("-----")
-        for i in range(len(first_value)): # actually the attibutes
-            first_dict = first_value[i]
-            print(first_dict.get(attibute))
-            #print(first_value)
-            #print(first_value)
-        #    first_value = first_dict.get(attibute)
-        #    print(first_value)
-        #    if(first_value = first_value[i].get)
+    for x in range(len(first_value)):
+        value = (first_value[x].get(attibute))
+        sub_set.append(value)
 
-            #print(first_value[i])
+    sorted = Counter(sub_set)
+    sub_list_of_attibutes = []
+    for key in sorted:
+        attibutes_sub_list = []
+        for x in range(0,len(set)):
+            if(key in set[x][1].values()):
+                attibutes_sub_list.append(set[x])
 
-            #print(question)
-            #first_value = 0
-            #second_value = 0
-        #    print(first_value[1].get(attibute))
-            #if(question = first_value[i].get(attibute)):
-            #    first_value + 1
-            #else:
-            #    second_value + 1
-
-            #if(question = first_value[i]):
-            #    first_counter + 1
-            #print(question)
-            #dict = first_value[i]
-        #    print(question.get(attibute))
-            #print(first_counter)
-        #    S1 = []#
-        #    S1.append(dict)
-            #if(S1.contains())
-
-            #print(dict.get(attibute))
-
-            #print(first_value[i])
+        sub_list_of_attibutes.append(attibutes_sub_list)
+    print(sub_set)
+    entropy = (entropy_categories(set))
+    print("entropy of set" , entropy)
+    size_of_set = len(set)
+    for x in range(len(sub_list_of_attibutes)):
+        values_for_entropy = sub_list_of_attibutes[x]
+        sub_entropy = (len(sub_list_of_attibutes[x])/size_of_set)*entropy_categories(values_for_entropy)
+        entropy = entropy - sub_entropy
+    print("entropy of" , attibute, ":", entropy)
 
 
-    #    for dict, attribute in zip(first_value, first_line):
-    #    print("attibutes" , attributes)
-#        print("attribute", ":" , attribute, "---", "dict" , ":" , dict)
-        #value = dict.get(attribute)
-    #    print(value)
-    #for i in (range(len(first_value))):
-#        example = first_value[i]
-        #print(example)
-    #for x in range(len(attributes)):
-    #    print(attributes[x])
+# N.B: divide the divided cateogies of the yes and the no, by the category type
+def entropy_categories(set):
+    category_value = [value[0] for value in set] # prints the first value of the tuple in the list
+    total_number_categories = (len(category_value)) # since play tennis is in the list
+    sorted = Counter(category_value)
+    len_of_list = len(sorted)
 
-
-
-    #    print(example)
-    #for x in range(len(attributes)):
-    #    attribute = attributes[x]
-#        print(value)
-
-            #print(first_value)
-        #    print("Type of first value", type(first_value))
-        #    print("This is the first value" , first_value)
-            #print(first_value[i].get(value, default = None))
-
-
-
-def entropy(Yes, No):
-        entropy = -(Yes*(math.log(Yes)/math.log(2))) - (No) * (math.log(No)/math.log(2))
-        return (entropy)
-
-#def gain(Entropy(s) - )
+    entropyV = 0
+    for key in sorted.values():
+    #    print(key)
+        value = key/total_number_categories
+        entropy2 = (value*(math.log(value)/math.log(2)))
+        entropyV = entropyV - entropy2
+    return(entropyV)
 
 ReadFile("TennisDataSet.txt")
-
-atributes_gain(lines)
+call_attibutes()
