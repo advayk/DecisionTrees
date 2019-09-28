@@ -138,6 +138,7 @@ def ID3(set, attributes):
         print("-----------------------------")
         if(len(copy_attributes) != 0 ):
             ID3(recursiveID3_set , copy_attributes)
+
 class Node:
     def __init__(self,label,leaf):
         self.label = label
