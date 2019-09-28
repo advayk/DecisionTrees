@@ -84,43 +84,67 @@ def entropy_categories(set):
 
 
 def ID3(set, attributes):
+    copy_attributes = attributes[:]
     category_value = [value[0] for value in set] # prints the category value
-    #atributes_gain(set,attributes )
-    # copy_attributes = attribute
-    # gain = {}
-    #
-    # for attibute in attibutes[1:]:
-    #     atributes_gain(set,attibute)
-    #
-
     print(len(category_value))
-    # print("copy of attributes ", copy_attributes)
     same = True
     for x in range(0,len(category_value)-1): # from 0 - 12
-        if(category_value[x] != category_value[x+1]): # will go to 13
+        if(category_value[x] != category_value[x+1]): #
             same = False
-    print(same)
 
-    attibute_entropy = []
-    for attibute in attributes[:]:
-        attibute_entropy.append(atributes_gain(set, attibute))
-#    print(attibute_entropy)
+    if(same == True):
+        print("all values are the same")
+        return(Node(category_value[0]), True) # if all the values are the same: return the category
 
-    best_attibute = max(attibute_entropy)
+    if(len(copy_attributes) == 0):
+        print("len of list is 0 ")
+        sorted = Counter(category_value) # sort the values
+        #category = (max(sorted))
+        return(Node(max(sorted)), True)
 
-    #best_attibute = [best[1] for best in attibute_entropy] # second value of tuple - gain
-    #print(best_attibute)
-    #best_attibute_value = (max(best_attibute))
-    #print("Biggest gain: ", best_attibute)
-    print(Node(best_attibute).attibute)
-#    print(set)
+#    if(len(copy_attributes) == 0):
 
-# new attibute = [attr for attr in attibute if attr!= bestAttr]
 
+    if(same == False and len(copy_attributes) != 0 ):
+        print("len of list: ",  len(copy_attributes))
+        attibute_entropy = []
+        for attibute in attributes[:]:
+            attibute_entropy.append(atributes_gain(set, attibute))
+
+        best_attibute = (max(attibute_entropy))[1]
+        #return(Node((best_attibute), False))
+        print("Attibute: " , best_attibute)
+        dict = [value[1] for value in set] # list of dict from second value of tuple in list
+        #print(dict)
+        sub_set_of_values = []
+
+        for x in range(len(dict)):
+            value = (dict[x].get(best_attibute))
+            sub_set_of_values.append(value)
+
+        sorted = Counter(sub_set_of_values) # counts the value in the set of the given attribute
+        recursiveID3_set = []
+        for key in sorted:
+            print("       " , key)
+            for x in range(len(dict)):
+                #print(dict[x])
+                #print("----------------------------------")
+                if((key in dict[x].values()) == True):
+                    #print(set[x])
+                    recursiveID3_set.append(set[x])
+        copy_attributes.remove(best_attibute)
+        #print(copy_attributes)
+        #print(recursiveID3_set)
+        print("-----------------------------")
+        if(len(copy_attributes) != 0 ):
+            ID3(recursiveID3_set , copy_attributes)
 class Node:
-    def __init__(self, attibute):
-        self.attibute = attibute
+    def __init__(self,label,leaf):
+        self.label = label
+        self.leaf = leaf
 
+    def child(self, leaf,label, parent):
+        self.parent = parent
 
 
 ReadFile("TennisDataSet.txt")
