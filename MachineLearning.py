@@ -16,7 +16,7 @@ from collections import Counter
 training_set = []
 texting_set = []
 
-myfile = open("PrimaryTumorSubDataSet.txt","r")
+myfile = open("TennisDataSet.txt","r")
 header = myfile.readline().strip().split(',')
 attributes = header[1:]
 
@@ -171,15 +171,15 @@ def ID3(set, attributes):
 
 
 def tree(root_node, indent):
-    copy_indent = 2*indent
-    print(copy_indent,root_node.label)
+    copy_indent = indent
+    print(copy_indent,root_node.label) # prints the root
 
     #print("printing tree")
     children = root_node.children
     #print(children)
     for x in range(len(children)):
-        print(2*copy_indent, list(children.keys())[x])
-        tree((list(children.values())[x]), 2*copy_indent)
+        print(2*copy_indent, list(children.keys())[x]) # prings the value
+        tree((list(children.values())[x]), 3*copy_indent)
 
         # nodes = list(children.values())
         # for x in range(len(nodes)):
