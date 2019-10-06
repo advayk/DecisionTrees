@@ -33,7 +33,7 @@ def ReadFile(file):
         data.append(tuple)
 
     root = (ID3(data,attributes))
-    tree(root)
+    tree(root, " ")
 
 def call_attibutes():
     for x in header[1:]:
@@ -170,15 +170,16 @@ def ID3(set, attributes):
         print("-----------------------------")
 
 
-def tree(root_node):
-    print(root_node.label)
-    print("        ")
+def tree(root_node, indent):
+    copy_indent = 2*indent
+    print(copy_indent,root_node.label)
+
     #print("printing tree")
     children = root_node.children
     #print(children)
     for x in range(len(children)):
-        print(list(children.keys())[x])
-        tree((list(children.values())[x]))
+        print(2*copy_indent, list(children.keys())[x])
+        tree((list(children.values())[x]), 2*copy_indent)
 
         # nodes = list(children.values())
         # for x in range(len(nodes)):
