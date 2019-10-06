@@ -16,7 +16,7 @@ from collections import Counter
 training_set = []
 texting_set = []
 
-myfile = open("TennisDataSet.txt","r")
+myfile = open("PrimaryTumorSubDataSet.txt","r")
 header = myfile.readline().strip().split(',')
 attributes = header[1:]
 
@@ -38,7 +38,7 @@ def ReadFile(file):
 def call_attibutes():
     for x in header[1:]:
         atributes_gain(data, x)
-        print("----------------------------------------------")
+        #print("----------------------------------------------")
 
 def atributes_gain(set, attibute):
     sub_set_of_values = []
@@ -87,7 +87,7 @@ def entropy_categories(set):
 
 
 def ID3(set, attributes):
-    print("-----------------------------------------------------")
+    #print("-----------------------------------------------------")
     copy_attributes = attributes[:]
     category_value = [value[0] for value in set] # puts the catgeory in value in a list
     same = True # checks to see if its same
@@ -97,12 +97,12 @@ def ID3(set, attributes):
 
     # Checks to see if they all belong to the same category
     if(same == True):
-        print("all values are the same")
+        #print("all values are the same")
         return((Node(category_value[0], True, None))) #if all the values are the same: return the category
 
     # If there are no more attibutes return a leaf node
     if(len(copy_attributes) == 0):
-        print("no more attibutes")
+        #print("no more attibutes")
         sorted = Counter(category_value) # sort the values
         return(Node(max(sorted), True, None)) # returns the leaf node with the most common category
         # parantheses problem!!!!
@@ -111,7 +111,7 @@ def ID3(set, attributes):
 
 
     if(same == False and len(copy_attributes) != 0 ): # if the list is not empty or not the same then.....
-        print("len of attibute list: ",  len(copy_attributes))
+        #print("len of attibute list: ",  len(copy_attributes))
         attibute_entropy = []
         for attibute in attributes[:]:
             attibute_entropy.append(atributes_gain(set, attibute))
@@ -119,7 +119,7 @@ def ID3(set, attributes):
         best_attibute = (max(attibute_entropy))[1] # gets the max attibute_entropy
         copy_attributes.remove(best_attibute) # removes that arribute from list
 
-        print("Attibute: " , best_attibute)
+        #print("Attibute: " , best_attibute)
         list_of_dict_of_example = [value[1] for value in set] # list of dict from second value of tuple in list
         #print(list_of_dict)
         #print("-------")
@@ -132,7 +132,7 @@ def ID3(set, attributes):
 
 
         sorted_value_of_attributes = Counter(sub_set_of_values) # counts the value in the set of the given attribute (puts in order)
-        print("sorted value,",  sorted_value_of_attributes)
+        #print("sorted value,",  sorted_value_of_attributes)
         #print(sub_set_of_values) # prints all the values for that attibute
 
         recursiveID3_set = []
@@ -147,15 +147,15 @@ def ID3(set, attributes):
 
         return_Node = Node(best_attibute, False, None)
         for value_of_attribute in sorted_value_of_attributes: # For each value v of that attribute
-            print("---------------------------")
-            print("  Possible Values: " , value_of_attribute)
+            #print("---------------------------")
+            #print("  Possible Values: " , value_of_attribute)
             examples_of_value = []
             for x in range(len(list_of_dict_of_example)):
                 if((list_of_dict_of_example[x][best_attibute]) == value_of_attribute): #the examples that have value v and all the remaining attributes
                         #examples_of_value.append((list_of_dict_of_example[x][best_attibute]))
                         #print(set[x])
                         examples_of_value.append(set[x])
-            print(len(examples_of_value), ": ", examples_of_value)
+            #print(len(examples_of_value), ": ", examples_of_value)
 
             if(len(examples_of_value) == 0):
                 print("no more values")
@@ -167,7 +167,7 @@ def ID3(set, attributes):
                 #Node.add_child(value_of_attribute, child)
 
         return(return_Node)
-        print("-----------------------------")
+        #print("-----------------------------")
 
 
 def tree(root_node, indent):
@@ -200,5 +200,5 @@ class Node:
     def get_child(self):
         print("hello")
 
-ReadFile("TennisDataSet.txt")
+ReadFile("MushroomDataSet.txt")
 #call_attibutes()

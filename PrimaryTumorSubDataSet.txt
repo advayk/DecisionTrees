@@ -1,0 +1,10 @@
+location,age-range,sex,histologic-type,degree-of-diffe,bone,bone-marrow,lung,pleura,peritoneum,liver,brain,skin,neck,supraclavicular,axillar,mediastinum,abdominal
+lung,>=60,female,nan,nan,no,no,no,no,no,yes,no,no,no,no,no,no,no
+lung,>=60,male,nan,poorly,no,no,no,no,no,yes,no,no,no,yes,no,yes,no
+breast,30-59,female,adeno,nan,no,no,no,yes,no,no,no,yes,no,no,yes,no,no
+ovary,30-59,female,adeno,nan,no,no,no,no,yes,no,no,no,no,no,no,no,no
+ovary,30-59,female,adeno,nan,no,no,no,yes,yes,no,no,no,no,no,no,no,no
+colon,30-59,male,adeno,nan,no,no,no,no,no,yes,no,no,no,no,no,no,no
+prostate,30-59,male,adeno,nan,yes,no,no,no,no,no,no,no,no,no,no,no,no
+lung,30-59,female,adeno,nan,yes,no,no,no,no,no,yes,no,no,no,no,yes,no
+prostate,30-59,male,adeno,fairly,no,no,no,no,no,no,no,no,yes,yes,no,no,no
