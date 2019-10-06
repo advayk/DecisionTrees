@@ -22,6 +22,7 @@ attributes = header[1:]
 
 data = []
 def ReadFile(file):
+    list_of_nodes = []
     for line in myfile:
         sentence = line.strip().split(",")
     #    print(sentence)
@@ -30,7 +31,9 @@ def ReadFile(file):
             dict[attribute] = value # creating a new entry
         tuple = (sentence[0],dict)
         data.append(tuple)
-    ID3(data,attributes)
+
+    root = (ID3(data,attributes))
+    tree(root)
 
 def call_attibutes():
     for x in header[1:]:
@@ -84,69 +87,117 @@ def entropy_categories(set):
 
 
 def ID3(set, attributes):
+    print("-----------------------------------------------------")
     copy_attributes = attributes[:]
-    category_value = [value[0] for value in set] # prints the category value
-    print(len(category_value))
-    same = True
+    category_value = [value[0] for value in set] # puts the catgeory in value in a list
+    same = True # checks to see if its same
     for x in range(0,len(category_value)-1): # from 0 - 12
         if(category_value[x] != category_value[x+1]): #
             same = False
 
+    # Checks to see if they all belong to the same category
     if(same == True):
         print("all values are the same")
-        return(Node(category_value[0]), True) # if all the values are the same: return the category
+        return((Node(category_value[0], True, None))) #if all the values are the same: return the category
 
+    # If there are no more attibutes return a leaf node
     if(len(copy_attributes) == 0):
-        print("len of list is 0 ")
+        print("no more attibutes")
         sorted = Counter(category_value) # sort the values
-        #category = (max(sorted))
-        return(Node(max(sorted)), True)
+        return(Node(max(sorted), True, None)) # returns the leaf node with the most common category
+        # parantheses problem!!!!
 
 #    if(len(copy_attributes) == 0):
 
 
-    if(same == False and len(copy_attributes) != 0 ):
-        print("len of list: ",  len(copy_attributes))
+    if(same == False and len(copy_attributes) != 0 ): # if the list is not empty or not the same then.....
+        print("len of attibute list: ",  len(copy_attributes))
         attibute_entropy = []
         for attibute in attributes[:]:
             attibute_entropy.append(atributes_gain(set, attibute))
 
-        best_attibute = (max(attibute_entropy))[1]
-        #return(Node((best_attibute), False))
+        best_attibute = (max(attibute_entropy))[1] # gets the max attibute_entropy
+        copy_attributes.remove(best_attibute) # removes that arribute from list
+
         print("Attibute: " , best_attibute)
-        dict = [value[1] for value in set] # list of dict from second value of tuple in list
-        #print(dict)
+        list_of_dict_of_example = [value[1] for value in set] # list of dict from second value of tuple in list
+        #print(list_of_dict)
+        #print("-------")
         sub_set_of_values = []
 
-        for x in range(len(dict)):
-            value = (dict[x].get(best_attibute))
-            sub_set_of_values.append(value)
+        for x in range(len(list_of_dict_of_example)):
+            values_of_best_attribute = (list_of_dict_of_example[x].get(best_attibute)) # dict is the list of dicationaries
+            #print(values_of_best_attribute)
+            sub_set_of_values.append(values_of_best_attribute)
 
-        sorted = Counter(sub_set_of_values) # counts the value in the set of the given attribute
+
+        sorted_value_of_attributes = Counter(sub_set_of_values) # counts the value in the set of the given attribute (puts in order)
+        print("sorted value,",  sorted_value_of_attributes)
+        #print(sub_set_of_values) # prints all the values for that attibute
+
         recursiveID3_set = []
-        for key in sorted:
-            print("       " , key)
-            for x in range(len(dict)):
-                #print(dict[x])
-                #print("----------------------------------")
-                if((key in dict[x].values()) == True):
-                    #print(set[x])
-                    recursiveID3_set.append(set[x])
-        copy_attributes.remove(best_attibute)
-        #print(copy_attributes)
-        #print(recursiveID3_set)
+    #    Node_list = []
+
+     # create a child for that value by applying one of the following two options:
+        #print(list_of_dict)
+        # print("                  ")
+        # print("                  ")
+        # print("                  ")
+
+
+        return_Node = Node(best_attibute, False, None)
+        for value_of_attribute in sorted_value_of_attributes: # For each value v of that attribute
+            print("---------------------------")
+            print("  Possible Values: " , value_of_attribute)
+            examples_of_value = []
+            for x in range(len(list_of_dict_of_example)):
+                if((list_of_dict_of_example[x][best_attibute]) == value_of_attribute): #the examples that have value v and all the remaining attributes
+                        #examples_of_value.append((list_of_dict_of_example[x][best_attibute]))
+                        #print(set[x])
+                        examples_of_value.append(set[x])
+            print(len(examples_of_value), ": ", examples_of_value)
+
+            if(len(examples_of_value) == 0):
+                print("no more values")
+                #most_common_category = Counter(list_of_dict_of_example)
+            else:
+                child = ID3(examples_of_value, copy_attributes)
+                return_Node.add_child(value_of_attribute, child)
+                #print(child)
+                #Node.add_child(value_of_attribute, child)
+
+        return(return_Node)
         print("-----------------------------")
-        if(len(copy_attributes) != 0 ):
-            ID3(recursiveID3_set , copy_attributes)
+
+
+def tree(root_node):
+    print(root_node.label)
+    print("        ")
+    #print("printing tree")
+    children = root_node.children
+    #print(children)
+    for x in range(len(children)):
+        print(list(children.keys())[x])
+        tree((list(children.values())[x]))
+
+        # nodes = list(children.values())
+        # for x in range(len(nodes)):
+        #     tree(nodes[x])
+#    print(label)
+
+
 
 class Node:
-    def __init__(self,label,leaf):
+    def __init__(self,label,leaf,children):
         self.label = label
         self.leaf = leaf
+        self.children = {} # Key is a child
 
-    def child(self, leaf,label, parent):
-        self.parent = parent
+    def add_child(self, key, value):
+        self.children[key] = value
 
+    def get_child(self):
+        print("hello")
 
 ReadFile("TennisDataSet.txt")
 #call_attibutes()
