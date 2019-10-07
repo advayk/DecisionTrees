@@ -4,26 +4,41 @@
 
 from collections import Counter
 import math
-
-training_set = []
-texting_set = []
+import random
+from fractions import Fraction #https://docs.python.org/3.5/library/fractions.html
 
 data = []
-def ReadFile(file):
+training_set = []
+testing_set = []
+def ReadFile(file, percentage):
+    frac = Fraction(percentage)
     myfile = open(file,"r")
     header = myfile.readline().strip().split(',')
     attributes = header[1:]
     list_of_nodes = []
+
     for line in myfile:
         sentence = line.strip().split(",")
         dict = {}
         for value, attribute in zip(sentence[1:], header[1:]): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
             dict[attribute] = value # creating a new entry
+        #print(sentence[0])
         tuple = (sentence[0],dict)
         data.append(tuple)
 
-    root = (ID3(data,attributes))
-    tree(root, " ")
+    random.shuffle(data)
+
+    size = 0
+    for element in data:
+        size = size + 1
+        if((size/(len(data))) < frac):
+            training_set.append(element)
+        else:
+            testing_set.append(element)
+    #print(size)
+
+    root = (ID3(training_set,attributes))
+    print_tree(root, " ")
 
 
 def atributes_gain(set, attibute):
@@ -31,7 +46,7 @@ def atributes_gain(set, attibute):
     dict = [value[1] for value in set] # list of dict from second value of tuple in list
 
     for x in range(len(dict)):
-        value = (dict[x].get(attibute))
+        value = (dict[x].get(attibute)) # gets the values of the specific attibute
         sub_set_of_values.append(value)
 
     sorted = Counter(sub_set_of_values) # counts the value in the set of the given attribute
@@ -41,7 +56,6 @@ def atributes_gain(set, attibute):
         for x in range(0,len(set)):
             if(key in set[x][1].values()):
                 attibutes_sub_list.append(set[x])
-
         sorted_values.append(attibutes_sub_list)
     entropy = (entropy_categories(set))
     size_of_set = len(set)
@@ -120,13 +134,14 @@ def ID3(set, attributes):
                 return_Node.add_child(value_of_attribute, child)
         return(return_Node)
 
-def tree(root_node, indent):
-    copy_indent = indent
-    print(copy_indent,root_node.label) # prints the root
-    children = root_node.children
-    for x in range(len(children)):
-        print(2*copy_indent, list(children.keys())[x]) # prings the value
-        tree((list(children.values())[x]), 3*copy_indent)
+def print_tree(root_node, indent):
+    print(indent,root_node.label) # prints the root
+    children = root_node.children # gets the children of the root
+    for child_label in children:
+        #print(list(children.keys())[x])
+        print(indent + "  ", child_label) # prints the value
+        print_tree(children[child_label], indent + "     ")
+
 
 class Node:
     def __init__(self,label,leaf,children):
@@ -137,4 +152,5 @@ class Node:
     def add_child(self, key, value):
         self.children[key] = value
 
-ReadFile("TennisDataSet.txt")
+ReadFile("TennisDataSet.txt" , 1)
+# ReadFile("PrimaryTumorDataSet.txt")
