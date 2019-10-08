@@ -34,7 +34,7 @@ def ReadFile(file, percentage):
         if((size/(len(data))) < frac):
             training_set.append(element)
         else:
-            testing_set.append(element)
+            testing_set.append(element[1])
     #print(size)
 
     root = (ID3(training_set,attributes))
@@ -143,6 +143,13 @@ def print_tree(root_node, indent):
         print_tree(children[child_label], indent + "     ")
 
 
+
+def test():
+    for element_with_no_category in testing_set:
+        print(element_with_no_category)
+
+
+
 class Node:
     def __init__(self,label,leaf,children):
         self.label = label
@@ -152,5 +159,7 @@ class Node:
     def add_child(self, key, value):
         self.children[key] = value
 
-ReadFile("TennisDataSet.txt" , 1)
+ReadFile("MushroomDataSet.txt" , 1)
+test()
+# ReadFile("TennisDataSet.txt" , 1)
 # ReadFile("PrimaryTumorDataSet.txt")
