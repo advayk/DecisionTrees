@@ -37,7 +37,6 @@ def ReadFile(file, percentage):
         else:
             validation_set.append(element)
             testing_set.append(element[1])
-
     print(size)
 
 
@@ -50,7 +49,9 @@ def ReadFile(file, percentage):
     print("-------------------------")
     count = 0
     for x in range(len(testing_set)):
-        print(test(root, testing_set[x], validation_set[x]))
+        if(test(root, testing_set[x], validation_set[x]) == True):
+            count = count + 1
+    print((count/len(testing_set))*100)
     #     if test(root, testing_set[x], validation_set[x]) == True:
     #         count = count +1
     # print(count)
@@ -170,17 +171,21 @@ def test(root_node, example, validation_example):
         value = children[value_of_example]
         #print("value2:" , value.label)
         if(value.leaf == True):
-            print("--Leaf-")
-            print("Machine Learning answer: " , value.label) # it is a leaf and therfor should print it
-            print("Actual Answer: ",  validation_set[0][0])
-            if(value.label == validation_set[0][0]):
-                print("True")
+            # print("--Leaf-")
+            # print("Machine Learning answer: " , value.label) # it is a leaf and therfor should print it
+            # print("Actual Answer: ",  validation_example[0])
+            if(value.label == validation_example[0]):
+                return True
+            else:
+                return False
 
         else:
-            del example[root_node.label] # deletes the value
-            print("-Keep going---")
-            test(value, example, validation_example)
+            # del example[root_node.label] # deletes the value
+            # print("-Keep going---")
+            return test(value, example, validation_example)
+
     else:
+        return False
         print("not enough testing data to make a prediction")
 
 
@@ -216,7 +221,7 @@ class Node:
 
 #ReadFile("MushroomDataSet.txt" , 4/5)
 
-ReadFile("TennisDataSet.txt" , (3/5))
+ReadFile("MushroomDataSet.txt" , (1/4)) # percentage of training set
 
 # temperature
 #     mild
