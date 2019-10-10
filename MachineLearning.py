@@ -10,6 +10,7 @@ from fractions import Fraction #https://docs.python.org/3.5/library/fractions.ht
 data = []
 training_set = []
 testing_set = []
+validation_set = []
 def ReadFile(file, percentage):
     frac = Fraction(percentage)
     myfile = open(file,"r")
@@ -34,12 +35,25 @@ def ReadFile(file, percentage):
         if((size/(len(data))) < frac):
             training_set.append(element)
         else:
+            validation_set.append(element)
             testing_set.append(element[1])
-    #print(size)
 
+    print(size)
+
+
+
+
+
+    print("lenght of testing set: " , len(testing_set), " ... lenght of training set: " , len(training_set))
     root = (ID3(training_set,attributes))
     print_tree(root, " ")
-
+    print("-------------------------")
+    count = 0
+    for x in range(len(testing_set)):
+        print(test(root, testing_set[x], validation_set[x]))
+    #     if test(root, testing_set[x], validation_set[x]) == True:
+    #         count = count +1
+    # print(count)
 
 def atributes_gain(set, attibute):
     sub_set_of_values = []
@@ -144,9 +158,50 @@ def print_tree(root_node, indent):
 
 
 
-def test():
-    for element_with_no_category in testing_set:
-        print(element_with_no_category)
+
+def test(root_node, example, validation_example):
+#    print(example)
+    #print(root_node.label) # prints the root
+    value_of_example = example[root_node.label] # gets the value of the root_attribute
+    #print("value: " , value_of_example)
+    children = root_node.children
+    #print("child: " , children)
+    if(value_of_example in children):
+        value = children[value_of_example]
+        #print("value2:" , value.label)
+        if(value.leaf == True):
+            print("--Leaf-")
+            print("Machine Learning answer: " , value.label) # it is a leaf and therfor should print it
+            print("Actual Answer: ",  validation_set[0][0])
+            if(value.label == validation_set[0][0]):
+                print("True")
+
+        else:
+            del example[root_node.label] # deletes the value
+            print("-Keep going---")
+            test(value, example, validation_example)
+    else:
+        print("not enough testing data to make a prediction")
+
+
+
+
+
+
+
+
+
+
+
+
+    # else:
+    #     children = root_node.children # gets the children of the root
+    #     print(element_with_no_category[root_node.label])
+    #     for child_label in children:
+    #         #print(list(children.keys())[x])
+    #         print("child: "  + child_label) # prints the value
+    #         value = (children[child_label].leaf())
+    #         print(value)
 
 
 
@@ -159,7 +214,24 @@ class Node:
     def add_child(self, key, value):
         self.children[key] = value
 
-ReadFile("MushroomDataSet.txt" , 1)
-test()
-# ReadFile("TennisDataSet.txt" , 1)
+#ReadFile("MushroomDataSet.txt" , 4/5)
+
+ReadFile("TennisDataSet.txt" , (3/5))
+
+# temperature
+#     mild
+#        yes
+#     hot
+#        outlook
+#          sunny
+#             no
+#          overcast
+#             yes
+#     cool
+#        wind
+#          weak
+#             yes
+#          strong
+#             no
+#test()
 # ReadFile("PrimaryTumorDataSet.txt")
