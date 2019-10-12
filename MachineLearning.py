@@ -6,6 +6,9 @@ from collections import Counter
 import math
 import random
 from fractions import Fraction #https://docs.python.org/3.5/library/fractions.html
+# random.seed(4)
+
+
 
 data = []
 training_set = []
@@ -32,7 +35,7 @@ def ReadFile(file, percentage):
     size = 0
     for element in data:
         size = size + 1
-        if((size/(len(data))) < frac):
+        if(size <= (frac)*(len(data))):
             training_set.append(element)
         else:
             validation_set.append(element)
@@ -46,12 +49,12 @@ def ReadFile(file, percentage):
     print("lenght of testing set: " , len(testing_set), " ... lenght of training set: " , len(training_set))
     root = (ID3(training_set,attributes))
     print_tree(root, " ")
-    print("-------------------------")
+    #print("-------------------------")
     count = 0
     for x in range(len(testing_set)):
         if(test(root, testing_set[x], validation_set[x]) == True):
             count = count + 1
-    print((count/len(testing_set))*100)
+    print("Percentage accuracy: " , (count/len(testing_set))*100)
     #     if test(root, testing_set[x], validation_set[x]) == True:
     #         count = count +1
     # print(count)
@@ -186,7 +189,6 @@ def test(root_node, example, validation_example):
 
     else:
         return False
-        print("not enough testing data to make a prediction")
 
 
 
@@ -219,14 +221,21 @@ class Node:
     def add_child(self, key, value):
         self.children[key] = value
 
-#ReadFile("MushroomDataSet.txt" , 4/5)
+#ReadFile("TennisDataSet.txt" , 1/1)
 
-ReadFile("MushroomDataSet.txt" , (1/4)) # percentage of training set
+
+
+
+    # print("running this fraction: " , 1/i)
+    #
+    # print("---------------------------")
+#ReadFile("TitanicDataSet.txt" , (1/2)) # percentage of training set
+ReadFile("TitanicDataSet.txt" , (1/2)) # percentage of training set
 
 # temperature
 #     mild
 #        yes
-#     hot
+#     hot3
 #        outlook
 #          sunny
 #             no
