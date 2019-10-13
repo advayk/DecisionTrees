@@ -6,27 +6,22 @@ from collections import Counter
 import math
 import random
 from fractions import Fraction #https://docs.python.org/3.5/library/fractions.html
-# random.seed(4)
 
-
-
-data = []
+data = [] # contains all the elements
 training_set = []
 testing_set = []
-validation_set = []
+validation_set = [] # it contains the same elements as the testing set except contains the category value
 def ReadFile(file, percentage):
     frac = Fraction(percentage)
     myfile = open(file,"r")
     header = myfile.readline().strip().split(',')
     attributes = header[1:]
-    list_of_nodes = []
 
     for line in myfile:
         sentence = line.strip().split(",")
         dict = {}
         for value, attribute in zip(sentence[1:], header[1:]): # https://stackoverflow.com/questions/1663807/how-to-iterate-through-two-lists-in-parallel
-            dict[attribute] = value # creating a new entry
-        #print(sentence[0])
+            dict[attribute] = value
         tuple = (sentence[0],dict)
         data.append(tuple)
 
@@ -43,21 +38,14 @@ def ReadFile(file, percentage):
     print(size)
 
 
-
-
-
     print("lenght of testing set: " , len(testing_set), " ... lenght of training set: " , len(training_set))
     root = (ID3(training_set,attributes))
     print_tree(root, " ")
-    #print("-------------------------")
     count = 0
     for x in range(len(testing_set)):
         if(test(root, testing_set[x], validation_set[x]) == True):
             count = count + 1
     print("Percentage accuracy: " , (count/len(testing_set))*100)
-    #     if test(root, testing_set[x], validation_set[x]) == True:
-    #         count = count +1
-    # print(count)
 
 def atributes_gain(set, attibute):
     sub_set_of_values = []
@@ -102,7 +90,6 @@ def entropy_categories(set):
 
 
 def ID3(set, attributes):
-
     copy_attributes = attributes[:]
     category_value = [value[0] for value in set] # puts the catgeory in value in a list
     same = True # checks to see if its same
@@ -112,7 +99,6 @@ def ID3(set, attributes):
 
     # Checks to see if they all belong to the same category
     if(same == True):
-        #print("all values are the same")
         return((Node(category_value[0], True, None))) #if all the values are the same: return the category
 
     if(len(copy_attributes) == 0):
@@ -156,7 +142,6 @@ def print_tree(root_node, indent):
     print(indent,root_node.label) # prints the root
     children = root_node.children # gets the children of the root
     for child_label in children:
-        #print(list(children.keys())[x])
         print(indent + "  ", child_label) # prints the value
         print_tree(children[child_label], indent + "     ")
 
@@ -164,52 +149,20 @@ def print_tree(root_node, indent):
 
 
 def test(root_node, example, validation_example):
-#    print(example)
-    #print(root_node.label) # prints the root
     value_of_example = example[root_node.label] # gets the value of the root_attribute
-    #print("value: " , value_of_example)
     children = root_node.children
-    #print("child: " , children)
     if(value_of_example in children):
         value = children[value_of_example]
-        #print("value2:" , value.label)
         if(value.leaf == True):
-            # print("--Leaf-")
-            # print("Machine Learning answer: " , value.label) # it is a leaf and therfor should print it
-            # print("Actual Answer: ",  validation_example[0])
             if(value.label == validation_example[0]):
                 return True
             else:
                 return False
-
         else:
-            # del example[root_node.label] # deletes the value
-            # print("-Keep going---")
             return test(value, example, validation_example)
 
     else:
         return False
-
-
-
-
-
-
-
-
-
-
-
-
-    # else:
-    #     children = root_node.children # gets the children of the root
-    #     print(element_with_no_category[root_node.label])
-    #     for child_label in children:
-    #         #print(list(children.keys())[x])
-    #         print("child: "  + child_label) # prints the value
-    #         value = (children[child_label].leaf())
-    #         print(value)
-
 
 
 class Node:
@@ -221,31 +174,5 @@ class Node:
     def add_child(self, key, value):
         self.children[key] = value
 
-#ReadFile("TennisDataSet.txt" , 1/1)
 
-
-
-
-    # print("running this fraction: " , 1/i)
-    #
-    # print("---------------------------")
-#ReadFile("TitanicDataSet.txt" , (1/2)) # percentage of training set
-ReadFile("TitanicDataSet.txt" , (1/2)) # percentage of training set
-
-# temperature
-#     mild
-#        yes
-#     hot3
-#        outlook
-#          sunny
-#             no
-#          overcast
-#             yes
-#     cool
-#        wind
-#          weak
-#             yes
-#          strong
-#             no
-#test()
-# ReadFile("PrimaryTumorDataSet.txt")
+ReadFile("TennisDataSet.txt" , (0.9999)) # percentage of training set
