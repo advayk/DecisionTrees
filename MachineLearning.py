@@ -27,67 +27,74 @@ def ReadFile(file, percentage):
 
     random.shuffle(data)
 
-    size = 0
-    for element in data:
-        size = size + 1
-        if(size <= (frac)*(len(data))):
-            training_set.append(element)
-        else:
-            validation_set.append(element)
-            testing_set.append(element[1])
-    print(size)
 
+    size = 0
+
+    # note this function below is for testing wether "cheating" by giving a trained set gets 100%
+    for element in data:
+        training_set.append(element)
+        validation_set.append(element)
+        testing_set.append(element[1])
+
+    # for element in data:
+    #     size = size + 1
+    #     if(size <= (frac)*(len(data))):
+    #         training_set.append(element)
+    #     else:
+    #         validation_set.append(element)
+    #         testing_set.append(element[1])
+    print(len(data))
 
     print("lenght of testing set: " , len(testing_set), " ... lenght of training set: " , len(training_set))
-    root = (ID3(training_set,attributes))
+    # root = (ID3(training_set,attributes))
+    root = (ID3(data,attributes))
+
     print_tree(root, " ")
     count = 0
     for x in range(len(testing_set)):
-        if(test(root, testing_set[x], validation_set[x]) == True):
+        if(test(root, testing_set[x], validation_set[x]) == True): # test returns true if predicted output is correct
             count = count + 1
     print("Percentage accuracy: " , (count/len(testing_set))*100)
 
 def atributes_gain(set, attibute):
     sub_set_of_values = []
     dict = [value[1] for value in set] # list of dict from second value of tuple in list
-
     for x in range(len(dict)):
         value = (dict[x].get(attibute)) # gets the values of the specific attibute
         sub_set_of_values.append(value)
 
     sorted = Counter(sub_set_of_values) # counts the value in the set of the given attribute
-    sorted_values = [] # attibute values sorted according to index
-    for key in sorted:
+    list_of_sub_lists = [] # attibute values sorted according to index ( list of all sub sets)
+    for label in sorted:
         attibutes_sub_list = []
         for x in range(0,len(set)):
-            if(key in set[x][1].values()):
+            if(label in set[x][1].values()):
                 attibutes_sub_list.append(set[x])
-        sorted_values.append(attibutes_sub_list)
+        list_of_sub_lists.append(attibutes_sub_list)
+
+    print(sorted)
     entropy = (entropy_categories(set))
     size_of_set = len(set)
 
-    for x in range(len(sorted_values)):
-        values_for_entropy = sorted_values[x]
-        sub_entropy = (len(sorted_values[x])/size_of_set)*entropy_categories(values_for_entropy)
+    for x in range(len(list_of_sub_lists)):
+        values_for_entropy = list_of_sub_lists[x]
+        sub_entropy = (len(list_of_sub_lists[x])/size_of_set)*entropy_categories(values_for_entropy)
         entropy = entropy - sub_entropy
 
     tuple = (entropy, attibute)
     return(tuple)
 
-
 def entropy_categories(set):
     category_value = [value[0] for value in set] # list of first values of the tuple ( yes, no, yes, no etc..)
-    total_number_categories = (len(category_value)) # since play tennis is in the list
-    sorted = Counter(category_value) # sort the values
-    len_of_list = len(sorted)
-
+    total_number_categories = (len(category_value))
+    sorted = Counter(category_value) # sort the values, key is the value [yes:5, no:3]
+    len_of_list = len(sorted) # the lenght of this tells me the number of values in tennis there are 2
     total_entropy = 0
     for key in sorted.values():
         value = key/total_number_categories
         entropy_of_category = (value*(math.log(value)/math.log(2)))
         total_entropy = total_entropy - entropy_of_category
     return(total_entropy)
-
 
 def ID3(set, attributes):
     copy_attributes = attributes[:]
@@ -104,7 +111,6 @@ def ID3(set, attributes):
     if(len(copy_attributes) == 0):
         sorted = Counter(category_value) # sort the values
         return(Node(max(sorted), True, None)) # returns the leaf node with the most common category
-
 
     if(same == False and len(copy_attributes) != 0 ): # if the list is not empty or not the same then.....
         attibute_entropy = []
@@ -145,9 +151,6 @@ def print_tree(root_node, indent):
         print(indent + "  ", child_label) # prints the value
         print_tree(children[child_label], indent + "     ")
 
-
-
-
 def test(root_node, example, validation_example):
     value_of_example = example[root_node.label] # gets the value of the root_attribute
     children = root_node.children
@@ -164,7 +167,6 @@ def test(root_node, example, validation_example):
     else:
         return False
 
-
 class Node:
     def __init__(self,label,leaf,children):
         self.label = label
@@ -175,4 +177,4 @@ class Node:
         self.children[key] = value
 
 
-ReadFile("TennisDataSet.txt" , (0.9999)) # percentage of training set
+ReadFile("MushroomDataSet.txt" , (0.999)) # percentage of training set
