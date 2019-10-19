@@ -7,6 +7,8 @@
 #  3) https://stackoverflow.com/questions/22412258/get-the-first-element-of-each-tuple-in-a-list-in-python
 #  4) https://stackoverflow.com/questions/17506947/local-variable-referenced-before-assignment-in-python
 #  5) # https://stackoverflow.com/questions/268272/getting-key-with-maximum-value-in-dictionary
+
+# Note to run specific file input name and percentage for training on line 214
 from collections import Counter
 import math
 import random
@@ -79,7 +81,7 @@ def atributes_gain(set, attribute):
     for x in range(len(list_of_sub_lists)):
         values_for_entropy = list_of_sub_lists[x]
         category_entropy = entropy_categories(values_for_entropy)
-        if(category_entropy < 0.0):
+        if(category_entropy < 0):
             print("entropy can not be negative ", category_entropy)
         sub_entropy = (len(list_of_sub_lists[x])/size_of_set)*category_entropy
         entropy =  entropy - sub_entropy
@@ -209,7 +211,7 @@ avereage_nodes = 0
 for x in range(1,11):
     print(x)
     num_nodes = 0
-    tuple = ReadFile("TitanicDataSet.txt" , (0.5)) # percentage of training set
+    tuple = ReadFile("TitanicDataSet.txt" , (0.5)) # percentage of training set  # INPUT FILE NAME HERE
     average_percentage_correct = average_percentage_correct + tuple[0]
     average_depth = average_depth + tuple[1]
     avereage_nodes = avereage_nodes + tuple[2]
